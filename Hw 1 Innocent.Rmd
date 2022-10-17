@@ -5,20 +5,13 @@ date: "2022-10-17"
 output: word_document
 ---
 ``
-```{r}
-rm(list=ls())
-library(tidyverse)
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-library(faux)
-```
+
 
 
 #1. Simulate a dataset with one X variable and one Y variable in R or Stata that does not contain a confounder or a collider. Let the relationship between Y and X be 5, that is the population parameter 𝛽5 = 5 (you can set 𝛽0 to anything you want). Assuming X causes Y, recover the coefficient on X using OLS.
 
 ```{r setup, include=FALSE}
-
+rm(list =ls())
 X <- floor(runif(1000, min=0, max=45))
 E <- rnorm(1000, mean=0, sd=0.01)
 B0 <- 2
@@ -31,6 +24,7 @@ summary(df)
 ```
 
 
+
 #Recover the coefficient on X using OLS.
 
 ```{r}
@@ -38,24 +32,111 @@ OLS1 <- lm(Y~X, data=df)
 OLS1
 summary(OLS1)
 ```
+#########################################################################################################
 
-#Alter your program from step 1 to include a confounder (a variable Z that is correlated with the X variable and the error term in your model)
+#2. Alter your program from step 1 to include a confounder (a variable Z that is correlated with the X variable and the error term in your model)
 
-`
+
 
 
 ```{r}
-N <- 1000
-z <- rnorm(1000, mean=25, sd=5)
-x <- .5 * w + rnorm(1000, mean=20, sd=5)
-y <- (2.2299+-0.119935) +.3 * w + B1 * x + rnorm(1000, mean=0, sd=0.01)
-df1 <- data.frame(x,y,z)
-
-
-#Check Regression of y on x 
-OLS2 <- lm(y~x, data=df1)
-OLS2
-summary(OLS2) # B0 is approx = 2 and B1 approx = 5
+Z <- floor(runif(1000, min=0, max=45))
+X <- 4+ 0.6*Z + rnorm(1000, mean=0, sd=0.1)
+B0 <- 2
+B1 <- 5
+B2 <- 3
+Y <- B0 + B1*X + B2*Z + rnorm(1000, mean=0, sd=0.1)
+df1 <- data.frame(Y, X, Z)
+head(df1)
+summary(df1)
 
 ```
 
+#########################################################################################################
+#2a Estimate a model of Y on X using OLS. Report your coefficient. 
+
+
+```{r}
+OLS2 <- lm(Y~X, data=df1)
+OLS2
+summary(OLS2)
+
+```
+
+#Coefficients have changes. B0 is now ------- and B1 is now ------
+
+#########################################################################################################
+
+
+
+
+#2a(i) What should it have been?
+
+#estimates should be the same as in 1. We want B0 to be equal to 2 and B1 = 5
+
+
+#########################################################################################################
+
+#2a (ii) What is the bias?
+
+#Bias B1 = 5-  9.996728 = 
+#Bias B0 - 2- -17.954363 = 
+
+#Bias due to Endogeneity 
+#The missing variable is now appearing in the error term and  the X variable is correlated with the error term
+
+
+#########################################################################################################
+
+#2(b) Estimate a model of Y on X but include your confounder. Is the bias eliminated? 
+
+```{r}
+
+OLS3 <- lm(Y~X + Z, data=df1)
+OLS3
+summary(OLS3)
+
+```
+#The Bias is eliminated.
+#The estimates are close to 5 but are not exactly equal.  
+
+#Why is the coefficient not exactly equal to 5?
+#Becaue of the error term.  
+
+#########################################################################################################
+
+# 2c. Provide an example of an omitted variable that could cause bias in a regression.
+
+Omitted variable is comes when we have a variable that has a significant impact on Y and correlated with X  is left out of the equation. For example,  A variable A causes Y and A also depends on X.  
+
+
+
+
+
+
+
+#########################################################################################################
+
+#2(d). Provide an example of selection bias that could cause bias in a regression. Is this the same as omitted variable bias?
+
+Selection bias happens when the sample is not random such that the subset is not representative of the target population. 
+Examples include  
+ -when participants from a specified population are more likely to be selected to participate in a trial than others
+ -when the method used to assign subjects to the study groups is inadequate and produces systematic differences between the        participants in the study groups.
+ when we have Loss to follow-up and attrition. 
+
+This not the same as omitted variable bias. 
+
+##################.#######################################################################################
+
+
+#2(e). Provide an example of non-random measurement error in an X variable that could lead to bias. Is this the same as omitted variable bias?
+
+
+
+
+
+
+
+
+#########################################################################################################
