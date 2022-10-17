@@ -4,27 +4,40 @@ author: "Innocent Vomitadyo"
 date: "2022-10-17"
 output: word_document
 ---
+``
+```{r}
+rm(list=ls())
+```
+
+
+#1. Simulate a dataset with one X variable and one Y variable in R or Stata that does not contain a confounder or a collider. Let the relationship between Y and X be 5, that is the population parameter 𝛽5 = 5 (you can set 𝛽0 to anything you want). Assuming X causes Y, recover the coefficient on X using OLS.
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+X <- floor(runif(1000, min=0, max=45))
+E <- rnorm(1000, mean=0, sd=0.01)
+B0 <- 2
+B1 <- 5
+Y <- B0 + B1*X + E
+df <- data.frame(Y, X)
+
+head(df)
+
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+#Recover the coefficient on X using OLS.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+OLS1 <- lm(Y~X, data=df)
+OLS1
+summary(OLS1)
 ```
 
-## Including Plots
+#Alter your program from step 1 to include a confounder (a variable Z that is correlated with the X variable and the error term in your model).
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+rnorm_pre()
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
