@@ -132,6 +132,7 @@ This not the same as omitted variable bias.
 
 #2(e). Provide an example of non-random measurement error in an X variable that could lead to bias. Is this the same as omitted variable bias?
 
+Happens when a variable is not perfectly measured
 
 
 
@@ -140,3 +141,89 @@ This not the same as omitted variable bias.
 
 
 #########################################################################################################
+
+#3.Alter your program from step 1 to include a collider (a variable K that is caused by both X and Y)
+
+
+```{r}
+
+X <- floor(runif(1000, min=0, max=45))
+B0 <- 2
+B1 <- 5
+Y <- B0 + B1*X + rnorm(1000, mean=0, sd=1)
+K <- 0.60*X +0.7*Y + rnorm(1000, mean=0, sd=1)
+
+
+df2 <- data.frame(Y, X, K)
+head(df2)
+summary(df2)
+
+```
+
+
+
+#########################################################################################################
+
+
+#3(a). Estimate a model of Y on X using OLS. Report your coefficient. 
+#(i). Is your estimate biased or not?
+
+
+```{r}
+
+OLS4 <- lm(Y~X, data=df2)
+OLS4
+summary(OLS4)
+
+
+```
+
+
+Estimates are not biased. 
+
+
+#########################################################################################################
+
+# 3(b). Estimate a model of Y on X but include your collider. Is your estimate of 𝛽𝑋 biased or unbiased? 
+
+```{r}
+
+OLS5 <- lm(Y~X+K, data=df2)
+OLS5
+summary(OLS5)
+
+
+```
+
+Estimate of B1 is now biased.  
+
+
+#########################################################################################################
+
+#3(C)Provide an example of a collider that could cause bias in a regression.
+
+
+
+
+
+
+
+
+
+
+#########################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
