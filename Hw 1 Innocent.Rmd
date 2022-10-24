@@ -10,7 +10,7 @@ output: word_document
 
 #1. Simulate a dataset with one X variable and one Y variable in R or Stata that does not contain a confounder or a collider. Let the relationship between Y and X be 5, that is the population parameter 𝛽5 = 5 (you can set 𝛽0 to anything you want). Assuming X causes Y, recover the coefficient on X using OLS.
 
-```{r setup, include=FALSE}
+```{r}
 rm(list =ls())
 X <- floor(runif(1000, min=0, max=45))
 E <- rnorm(1000, mean=0, sd=0.01)
